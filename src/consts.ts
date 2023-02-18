@@ -3,4 +3,4 @@
 
 export const SITE_TITLE = 'Equn Jerks | Website';
 export const SITE_DESCRIPTION = 'Welcome to my website!';
-export const HOMEPAGE_URL = '/';
+export const HOMEPAGE_URL = 'https://ghettoscum.vercel.app';
