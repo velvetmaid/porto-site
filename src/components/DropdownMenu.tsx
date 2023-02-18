@@ -1,6 +1,6 @@
 import { Menu, Transition } from "@headlessui/react";
 import React, { Fragment } from "react";
-import { IoMenu } from "react-icons/io5/index.js";
+import { IoLogoGithub, IoMenu } from "react-icons/io5/index.js";
 import DropdownMenuItem from "./DropdownMenuItem";
 
 export default function DropdownMenu() {
@@ -25,12 +25,15 @@ export default function DropdownMenu() {
         leaveTo="transform opacity-0 scale-95"
       >
         <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md border border-zinc-400 dark:border-zinc-700 bg-orange-50 dark:bg-zinc-800 shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none divide-zinc-400 dark:divide-zinc-700">
-          <div className="py-1">
-            <div className="px-3 py-2 uppercase font-bold text-xs">
-              Categories
-            </div>
+          <div className="py-2">
+            {/* <div className="px-3 py-2 uppercase font-bold text-xs">
+              ABC DEF
+            </div> */}
             <DropdownMenuItem href="/Work">Work</DropdownMenuItem>
             <DropdownMenuItem href="/About">About</DropdownMenuItem>
+            <a className="w-1" href="https://github.com/camieuxgoofy" target="_blank">
+              <IoLogoGithub className="md:hidden mx-auto" size={30} />
+            </a>
           </div>
         </Menu.Items>
       </Transition>

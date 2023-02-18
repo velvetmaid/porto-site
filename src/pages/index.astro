@@ -1,21 +1,77 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
-import Body from '../components/Body.astro';
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+import Body from "../components/Body.astro";
+import Content from "../components/Content.astro";
+
+const works = (await Astro.glob("./works/*md")).sort(
+  (a: any, b: any) =>
+    new Date(b.frontmatter.createdAt).valueOf() -
+    new Date(a.frontmatter.createdAt).valueOf()
+);
 ---
 
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<Body>
-		<Header title={SITE_TITLE} />
-		<main class="pt-12">
-		<h1>Hello World</h1>
-		</main>
-		<Footer />
-	</Body>
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+  </head>
+  <Body>
+    <Header title={SITE_TITLE} />
+    <main class="pt-12">
+      <Content>
+        <section>
+          <img
+            class="w-24 rounded-full mx-auto border-x-[1.35px] border-y-[0.6px] bg-[#a1a8e1] dark:bg-[#646fa3] border-none"
+            src="https://avatars.githubusercontent.com/u/72339948?v=4"
+            alt="Github Avatar"
+          />
+          <div
+            class="box-content dark:bg-[#330a53] bg-violet-300 rounded-lg p-3 m-6 text-center"
+          >
+            <p class="font-macondo font-semibold">
+              Hi, I am Equn Jerks as ghetto boi who love ate sh*t everyday
+            </p>
+          </div>
+        </section>
+        <div class="pb-8 w-ful mx-auto grid place-items-center">
+          <button class="py-[0.15rem] px-4 font-bold items-center bg-amber-200 dark:bg-amber-300 dark:text-violet-700 rounded-lg text-xs">My Resume</button>
+        </div>
+        <section>
+          <span>
+            <h1 class="text-xl">Works</h1>
+          </span>
+          <hr class="py-3">
+
+          <ul class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {
+              works.map((works) => (
+                <li class="text-center mb-4">
+                  <a href={works.url}>
+                    <img
+                      class="border border-slate-300 dark:border-zinc-700 rounded-xl"
+                      src={works.frontmatter.heroImage}
+                      width={720 * 2}
+                      alt="Thumbnail"
+                    />
+                    <div class="mt-3 text-xl font-bold">
+                      {works.frontmatter.title}
+                    </div>
+                    {works.frontmatter.description && (
+                      <div class="opacity-70">
+                        {works.frontmatter.description}
+                      </div>
+                    )}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </section>
+      </Content>
+    </main>
+    <Footer />
+  </Body>
 </html>

@@ -1,8 +1,6 @@
-import React from "react";
-
 export default function FootprintIcon () {
     return (
-        <svg fill="currentColor" className="w-5 inline-block transition-transform group-hover:rotate-[20deg]" version="1.0" xmlns="http://www.w3.org/2000/svg"
+        <svg fill="currentColor" className="w-5 inline-block transition-transform group-hover:animate-spin" version="1.0" xmlns="http://www.w3.org/2000/svg"
          viewBox="0 0 174.000000 187.000000"
         preserveAspectRatio="xMidYMid meet">
 

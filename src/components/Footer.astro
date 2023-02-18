@@ -1,13 +1,9 @@
 ---
+import { HOMEPAGE_URL } from "../consts";
+
 const today = new Date();
 ---
 
-<footer class="font-macondo">
-	&copy; {today.getFullYear()} Equn Jerks. All rights reserved.
+<footer class="font-macondo text-zinc-500 text-center">
+	&copy; {today.getFullYear()} <a class="font-bold" href={HOMEPAGE_URL}>Equn Jerks.</a>  All rights reserved.
 </footer>
-<style>
-	footer {
-		padding: 25px;
-		text-align: center;
-	}
-</style>
