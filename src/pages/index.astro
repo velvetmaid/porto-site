@@ -32,7 +32,7 @@ const works = (await Astro.glob("./works/*md")).sort(
             class="box-content dark:bg-[#330a53] bg-violet-300 rounded-lg p-3 m-6 text-center"
           >
             <p class="font-macondo font-semibold">
-              Hi, I am Equn Jerks as ghetto boi who love ate sh*t everyday
+              I started all this from scratch with no thought or design
             </p>
           </div>
         </section>
@@ -50,7 +50,7 @@ const works = (await Astro.glob("./works/*md")).sort(
 
           <ul class="grid grid-cols-1 md:grid-cols-2 gap-4">
             {
-              works.map(work => (
+              works.map((work) => (
                 <li class="text-center mb-4">
                   <a href={work.url}>
                     <img
