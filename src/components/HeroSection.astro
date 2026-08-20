@@ -1,13 +1,12 @@
 ---
-const { title, description, avatar, worksCount } = Astro.props;
+const { title, avatar } = Astro.props;
 
-// separate last word for styling
 const words = title.split(" ");
 const lastWord = words.pop();
 const rest = words.join(" ");
 ---
 
-<div class="text-center space-y-4 text-sm md:text-basez">
+<div class="text-center space-y-5 text-sm md:text-base">
   <img
     class="w-40 md:w-52 rounded-full mx-auto ring-2 ring-violet-400/40 drop-shadow-lg animate-float"
     src={avatar}
@@ -18,41 +17,24 @@ const rest = words.join(" ");
     <span class="text-violet-400">{lastWord}</span>
   </h1>
 
-  <p class="text-sm md:text-base leading-relaxed opacity-80 max-w-md mx-auto">
-    {description}
+  <p class="text-sm md:text-base leading-relaxed opacity-80 max-w-sm mx-auto">
+    A corner for projects, experiments, and notes left behind.
   </p>
 
-  <div class="flex gap-8 justify-center mt-6 text-sm">
-    <div class="px-4 py-2 rounded-lg bg-violet-400/10 backdrop-blur-sm">
-      📂 {worksCount} Projects
-    </div>
-    <div class="px-4 py-2 rounded-lg bg-violet-400/10 backdrop-blur-sm">
-      📝 Notes & Docs
-    </div>
-  </div>
-
-  <div class="mt-8 flex gap-4 justify-center">
-    <a
-      href="/work"
-      class="px-6 py-2 rounded-full font-bold bg-violet-400/30 hover:scale-105 transition"
+  <!-- <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
+    <button
+      type="button"
+      data-archive-view="works"
+      class="rounded-full bg-violet-400/40 px-6 py-2 font-bold transition hover:scale-105 hover:bg-violet-400/50"
     >
       Explore Works
-    </a>
-    <a
-      href="/notes"
-      class="px-6 py-2 rounded-full font-bold bg-violet-400/30 hover:scale-105 transition"
+    </button>
+    <button
+      type="button"
+      data-archive-view="notes"
+      class="rounded-full bg-violet-400/15 px-6 py-2 font-bold transition hover:scale-105 hover:bg-violet-400/25"
     >
       Read Notes
-    </a>
-    <a
-      href="/contact"
-      class="px-6 py-2 rounded-full font-bold bg-violet-400/30 hover:scale-105 transition"
-    >
-      Contact
-    </a>
-  </div>
-
-  <!-- <p class="text-sm md:text-base opacity-60 italic tracking-wide">
-    
-  </p> -->
+    </button>
+  </div> -->
 </div>

@@ -22,11 +22,12 @@
   <!-- Menu icons -->
   <div
     id="menuIcons"
-    class="absolute left-1/2 -translate-x-1/2 top-full mt-4 flex flex-col items-center gap-4"
+    class="absolute left-1/2 -translate-x-1/2 top-full mt-4 flex flex-col items-center gap-4 pointer-events-none"
   >
     <a
-      href="/work"
-      class="w-10 h-10 flex items-center justify-center rounded-md bg-violet-400/10 hover:bg-violet-400/20 transition"
+      data-archive-view="works"
+      aria-label="Explore Works"
+      class="menu-item w-10 h-10 flex items-center justify-center rounded-md bg-violet-400/10 hover:bg-violet-400/20 transition opacity-0 translate-y-2"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -43,8 +44,9 @@
       </svg>
     </a>
     <a
-      href="/notes"
-      class="w-10 h-10 flex items-center justify-center rounded-md bg-violet-400/10 hover:bg-violet-400/20 transition"
+      data-archive-view="notes"
+      aria-label="Read Notes"
+      class="menu-item w-10 h-10 flex items-center justify-center rounded-md bg-violet-400/10 hover:bg-violet-400/20 transition opacity-0 translate-y-2"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -60,34 +62,36 @@
           d="M7 8h10M7 16h10M5 20h14V4H5v16z"></path>
       </svg>
     </a>
-    <a
-      href="/contact"
-      class="w-10 h-10 flex items-center justify-center rounded-md bg-violet-400/10 hover:bg-violet-400/20 transition"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-5 w-5 text-violet-400"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M16 12a4 4 0 01-8 0m8 0v6m-8-6v6"></path>
-      </svg>
-    </a>
   </div>
 </div>
 
 <script>
   const menuButton = document.getElementById("menuButton");
   const menuIcons = document.getElementById("menuIcons");
-
-  if (menuButton && menuIcons) {
-    menuButton.addEventListener("click", () => {
-      menuIcons.classList.toggle("hidden");
-    });
+  
+  if (!menuButton || !menuIcons) {
+    throw new Error("Required elements not found");
   }
+  
+  const items = menuIcons.querySelectorAll(".menu-item");
+
+  menuButton.addEventListener("click", () => {
+    const isOpen = menuIcons.classList.toggle("open"); // toggle state
+
+
+    items.forEach((item, i) => {
+      const element = item as HTMLElement;
+      if (isOpen) {
+        element.style.transitionDelay = `${i * 100}ms`; // stagger 
+        element.classList.remove("opacity-0", "translate-y-2");
+        element.classList.add("opacity-100", "translate-y-0");
+      } else {
+        element.style.transitionDelay = `${(items.length - i - 1) * 100}ms`; // reverse stagger
+        element.classList.remove("opacity-100", "translate-y-0");
+        element.classList.add("opacity-0", "translate-y-2");
+      }
+    });
+
+    menuIcons.classList.toggle("pointer-events-none");
+  });
 </script>

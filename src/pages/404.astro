@@ -8,30 +8,20 @@ import Body from "../components/Body.astro";
   <head>
     <BaseHead title="404 Not Found" description="Oops, page not found" />
   </head>
-  <Body class="flex flex-col min-h-screen">
-    <div class="fixed inset-0 z-0">
-      <img src="/assets/background.png" class="w-full h-full object-cover" />
-      <div class="absolute inset-0 bg-black/20"></div>
-    </div>
-    <main class="relative h-screen z-10 flex items-center justify-center font-sans">
-      <div
-        class="text-center bg-white/30 dark:bg-gray-900/30 backdrop-blur-md rounded-lg p-24 shadow-xl shadow-violet-400/20"
+  <Body>
+    <div class="font-sans text-center space-y-4 text-sm md:text-base">
+      <h1 class="text-9xl md:text-[12rem] drop-shadow-lg">
+        <span class="font-black text-violet-400">404</span>
+      </h1>
+      <p class="text-2xl opacity-80">
+        <span class="font-black text-violet-400">Oops, page not found</span>
+      </p>
+      <a
+        href="/"
+        class="mt-8 inline-block px-8 py-2 rounded-md font-bold bg-violet-400/30"
       >
-        <h1 class="text-9xl md:text-[12rem] drop-shadow-lg">
-          <span class="font-black text-violet-400">404</span>
-        </h1>
-        <p class="text-2xl opacity-80">
-          <span class="font-black text-violet-400"
-            >Oops, page not found</span>
-        </p>
-        <a
-          href="/"
-          class="mt-8 inline-block px-8 py-2 rounded-md font-bold bg-violet-400/30"
-        >
-          <span class="font-black"
-            >BACK</span>
-        </a>
-      </div>
-    </main>
+        <span class="font-black">BACK</span>
+      </a>
+    </div>
   </Body>
 </html>

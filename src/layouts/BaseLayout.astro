@@ -1,0 +1,32 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import Body from "../components/Body.astro";
+import ArchiveDeck from "../components/ArchiveDeck.astro";
+import NavBottom from "../components/NavBottom.astro";
+import TopBar from "../components/TopBar.astro";
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  deck?: boolean;
+  initialView?: "home" | "works" | "notes";
+}
+
+const { title, description, image, deck = false, initialView = "home" } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={title} description={description} image={image} />
+  </head>
+
+  <Body>
+    <section class="relative z-10 space-y-8">
+      <TopBar />
+      {deck ? <ArchiveDeck initialView={initialView} /> : <main id="archive-content"><slot /></main>}
+    </section>
+    <NavBottom />
+  </Body>
+</html>

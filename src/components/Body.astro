@@ -1,15 +1,40 @@
 ---
 import CustomCursors from "./CustomCursors.astro";
-import LoadingOverlay from "./LoadingOverlay.astro";
-
-const showLoading = true;
 ---
 
 <body
-  class="font-handlee bg-[#d4d8f7] dark:bg-[#212638] text-purple-900 dark:text-fuchsia-200 break-words leading-6 transition-colors duration-500"
+  class="min-h-screen break-words bg-[#d4d8f7] font-handlee leading-6 text-purple-900 transition-colors duration-500 dark:bg-[#212638] dark:text-fuchsia-200"
 >
-  <slot />
+  <div class="fixed inset-0 z-0 h-screen w-screen overflow-hidden">
+    <img
+      src="/assets/background.v1.webp"
+      class="h-full w-full min-h-screen object-cover"
+      alt=""
+    />
+    <div class="absolute inset-0 bg-black/20"></div>
+  </div>
+
+  <div class="relative z-10 flex min-h-screen items-center justify-center px-4 py-8">
+    <div
+      id="card"
+      class="relative mx-4 w-full max-w-3xl overflow-hidden rounded-lg p-6 backdrop-blur-md md:mx-0 md:p-12"
+    >
+      <slot />
+      <div id="glow" class="pointer-events-none absolute inset-0"></div>
+    </div>
+  </div>
+
   <CustomCursors />
-  <LoadingOverlay show={showLoading} />
 </body>
 
+<script>
+  const glow = document.getElementById("glow");
+  document.addEventListener("mousemove", (event) => {
+    if (!glow) return;
+
+    const rect = glow.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    glow.style.background = `radial-gradient(350px circle at ${x}px ${y}px, rgba(139, 92, 246, 0.5), transparent 50%)`;
+  });
+</script>

@@ -17,7 +17,7 @@ const cursors = {
   elian4: "/assets/cursors/艾莲表情包4.gif",
 };
 
-const { size = 48 } = Astro.props;
+const { size = 35 } = Astro.props;
 ---
 
 <div id="custom-cursor"
@@ -41,44 +41,63 @@ const { size = 48 } = Astro.props;
 
   if (!cursor || !cursorImg) throw new Error("Cursor elements not found");
 
-  // Move cursor custom
+  // ===== IDLE CONFIG =====
+  const IDLE_DELAY = 3500;
+  let idleTimer = null;
+  let isIdle = false;
+
+  function setIdle() {
+    isIdle = true;
+    cursorImg.src = cursors.alternate;
+  }
+
+  function resetIdle() {
+    if (isIdle) isIdle = false;
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(setIdle, IDLE_DELAY);
+  }
+
+  // ===== RULES =====
+  const rules = [
+    { check: (el) => el.tagName?.toLowerCase() === "a", type: "loc" },
+    { check: (el) => el.tagName?.toLowerCase() === "button", type: "loc" },
+    { check: (el) => ["input","textarea"].includes(el.tagName?.toLowerCase()), type: "text" },
+    { check: (el) => el.disabled, type: "unavailable" },
+    { check: (el) => el.classList?.contains("loading"), type: "working" },
+    { check: (el) => el.classList?.contains("cursor-alternate"), type: "alternate" },
+    { check: (el) => el.classList?.contains("cursor-handwriting"), type: "handwriting" },
+    { check: (el) => el.classList?.contains("cursor-help"), type: "help" },
+    { check: (el) => el.classList?.contains("cursor-loc"), type: "loc" },
+    { check: (el) => el.classList?.contains("cursor-person"), type: "person" },
+    { check: (el) => el.classList?.contains("cursor-elian1"), type: "elian1" },
+    { check: (el) => el.classList?.contains("cursor-elian2"), type: "elian2" },
+    { check: (el) => el.classList?.contains("cursor-elian3"), type: "elian3" },
+    { check: (el) => el.classList?.contains("cursor-elian4"), type: "elian4" },
+  ];
+
+  // ===== MAIN MOUSE MOVE =====
   document.addEventListener("mousemove", (e) => {
+    // move cursor
     cursor.style.left = e.clientX + "px";
     cursor.style.top = e.clientY + "px";
-  });
 
-  // Rules mapping → cursor key
-const rules = [
-  { check: (el) => el.tagName && el.tagName.toLowerCase() === "a", type: "loc" },
-  { check: (el) => el.tagName && el.tagName.toLowerCase() === "button", type: "loc" },
-  { check: (el) => el.tagName && ["input","textarea"].includes(el.tagName.toLowerCase()), type: "text" },
-  { check: (el) => "disabled" in el && el.disabled, type: "unavailable" },
-  { check: (el) => el.classList && el.classList.contains("loading"), type: "working" },
-  { check: (el) => el.classList && el.classList.contains("cursor-alternate"), type: "alternate" },
-  { check: (el) => el.classList && el.classList.contains("cursor-handwriting"), type: "handwriting" },
-  { check: (el) => el.classList && el.classList.contains("cursor-help"), type: "help" },
-  { check: (el) => el.classList && el.classList.contains("cursor-loc"), type: "loc" },
-  { check: (el) => el.classList && el.classList.contains("cursor-person"), type: "person" },
-  { check: (el) => el.classList && el.classList.contains("cursor-elian1"), type: "elian1" },
-  { check: (el) => el.classList && el.classList.contains("cursor-elian2"), type: "elian2" },
-  { check: (el) => el.classList && el.classList.contains("cursor-elian3"), type: "elian3" },
-  { check: (el) => el.classList && el.classList.contains("cursor-elian4"), type: "elian4" },
-];
+    // idle reset
+    resetIdle();
 
-  document.addEventListener("mouseenter", (e) => {
-    const target = e.target;
-    if (!target || !cursorImg) return;
+    // idle check
+    if (isIdle) return;
 
-    let type = "cross"; // default
+    let type = "pointer";
     for (const rule of rules) {
-      if (rule.check(target)) {
+      if (rule.check(e.target)) {
         type = rule.type;
         break;
       }
     }
 
-    if (cursorImg.src !== window.location.origin + cursors[type]) {
-      cursorImg.src = cursors[type];
-    }
+    cursorImg.src = cursors[type];
   }, true);
+
+  // init
+  resetIdle();
 </script>

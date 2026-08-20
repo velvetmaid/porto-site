@@ -1,0 +1,132 @@
+---
+import { getCollection } from "astro:content";
+import { SITE_TITLE } from "../consts";
+import HeroSection from "./HeroSection.astro";
+import FormattedDate from "./FormattedDate.astro";
+import { toRouteSlug } from "../utils/urlSlug";
+
+interface Props {
+  initialView?: "home" | "works" | "notes";
+}
+
+const { initialView = "home" } = Astro.props;
+const works = (await getCollection("works"))
+  .filter((work) => work.data.public)
+  .sort((a, b) => (b.data.pubDate?.valueOf() ?? 0) - (a.data.pubDate?.valueOf() ?? 0));
+const notes = (await getCollection("blog"))
+  .filter((note) => note.data.public)
+  .sort((a, b) => (b.data.pubDate?.valueOf() ?? 0) - (a.data.pubDate?.valueOf() ?? 0));
+---
+
+<main id="archive-deck" data-initial-view={initialView} aria-live="polite">
+  <section class:list={["archive-panel", { "is-active": initialView === "home" }]} data-archive-panel="home">
+    <HeroSection title={SITE_TITLE} avatar="/assets/profile.v1.webp" />
+  </section>
+
+  <section class:list={["archive-panel", { "is-active": initialView === "works" }]} data-archive-panel="works" aria-labelledby="works-title">
+    <div class="space-y-4 text-center text-sm md:text-base">
+      <h1 id="works-title" class="text-3xl font-bold drop-shadow-md md:text-5xl">Works</h1>
+      <p class="mx-auto max-w-md leading-relaxed opacity-80">A record of things made, tried, and left behind.</p>
+      {works.length === 0 ? (
+        <p class="pt-4 text-sm opacity-60">Nothing has been left here yet.</p>
+      ) : (
+        <ul class="mx-auto mt-8 max-w-xl space-y-3 text-left">
+          {works.map((work) => (
+            <li class="rounded-lg bg-violet-400/10 p-4 backdrop-blur-sm">
+              <a class="font-bold text-violet-900 hover:text-violet-600 dark:text-fuchsia-100 dark:hover:text-violet-200" href={`/works/${toRouteSlug(work.slug)}/`}>
+                {work.data.title}
+              </a>
+              {work.data.pubDate && <div class="mt-1 text-xs opacity-60"><FormattedDate date={work.data.pubDate} /></div>}
+              {work.data.description && <p class="mt-2 text-sm leading-relaxed opacity-80">{work.data.description}</p>}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  </section>
+
+  <section class:list={["archive-panel", { "is-active": initialView === "notes" }]} data-archive-panel="notes" aria-labelledby="notes-title">
+    <div class="space-y-4 text-center text-sm md:text-base">
+      <h1 id="notes-title" class="text-3xl font-bold drop-shadow-md md:text-5xl">Notes</h1>
+      <p class="mx-auto max-w-md leading-relaxed opacity-80">Observations, lessons, and loose threads collected along the way.</p>
+      {notes.length === 0 ? (
+        <p class="pt-4 text-sm opacity-60">Nothing has been recorded here yet.</p>
+      ) : (
+        <ul class="mx-auto mt-8 max-w-xl space-y-3 text-left">
+          {notes.map((note) => (
+            <li class="rounded-lg bg-violet-400/10 p-4 backdrop-blur-sm">
+              <a class="font-bold text-violet-900 hover:text-violet-600 dark:text-fuchsia-100 dark:hover:text-violet-200" href={`/blog/${toRouteSlug(note.slug)}/`}>
+                {note.data.title}
+              </a>
+              {note.data.pubDate && <div class="mt-1 text-xs opacity-60"><FormattedDate date={note.data.pubDate} /></div>}
+              {note.data.description && <p class="mt-2 text-sm leading-relaxed opacity-80">{note.data.description}</p>}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  </section>
+</main>
+
+<style>
+  .archive-panel { display: none; }
+  .archive-panel.is-active { display: block; }
+  .archive-panel.is-entering-next { animation: panel-enter-next 260ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+  .archive-panel.is-entering-previous { animation: panel-enter-previous 260ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+  .archive-panel.is-leaving-next { animation: panel-leave-next 180ms ease-in both; }
+  .archive-panel.is-leaving-previous { animation: panel-leave-previous 180ms ease-in both; }
+  @keyframes panel-enter-next { from { opacity: 0; transform: translateX(2.5rem); } }
+  @keyframes panel-enter-previous { from { opacity: 0; transform: translateX(-2.5rem); } }
+  @keyframes panel-leave-next { to { opacity: 0; transform: translateX(-2.5rem); } }
+  @keyframes panel-leave-previous { to { opacity: 0; transform: translateX(2.5rem); } }
+  @media (prefers-reduced-motion: reduce) { .archive-panel.is-entering-next, .archive-panel.is-entering-previous, .archive-panel.is-leaving-next, .archive-panel.is-leaving-previous { animation: none; } }
+</style>
+
+<script>
+  const deck = document.getElementById("archive-deck");
+  const views = ["home", "works", "notes"];
+  const backButton = document.getElementById("backBtn");
+  const forwardButton = document.getElementById("forwardBtn");
+  let currentView = deck?.dataset.initialView || "home";
+  let isSliding = false;
+
+  function updateControls() {
+    const index = views.indexOf(currentView);
+    if (backButton instanceof HTMLButtonElement) backButton.disabled = index <= 0;
+    if (forwardButton instanceof HTMLButtonElement) forwardButton.disabled = index >= views.length - 1;
+  }
+
+  function showView(nextView: string) {
+    if (isSliding || nextView === currentView || !views.includes(nextView)) return;
+    const currentPanel = document.querySelector(`[data-archive-panel="${currentView}"]`);
+    const nextPanel = document.querySelector(`[data-archive-panel="${nextView}"]`);
+    if (!(currentPanel instanceof HTMLElement) || !(nextPanel instanceof HTMLElement)) return;
+
+    isSliding = true;
+    const direction = views.indexOf(nextView) > views.indexOf(currentView) ? "next" : "previous";
+    currentPanel.classList.add(`is-leaving-${direction}`);
+
+    window.setTimeout(() => {
+      currentPanel.className = "archive-panel";
+      nextPanel.className = `archive-panel is-active is-entering-${direction}`;
+      currentView = nextView;
+      updateControls();
+      window.setTimeout(() => {
+        nextPanel.classList.remove(`is-entering-${direction}`);
+        isSliding = false;
+      }, 260);
+    }, 180);
+  }
+
+  document.addEventListener("click", (event) => {
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+    const viewButton = target.closest("[data-archive-view]");
+    if (!(viewButton instanceof HTMLElement)) return;
+    showView(viewButton.dataset.archiveView || "");
+  });
+
+  backButton?.addEventListener("click", () => showView(views[views.indexOf(currentView) - 1]));
+  forwardButton?.addEventListener("click", () => showView(views[views.indexOf(currentView) + 1]));
+  updateControls();
+</script>

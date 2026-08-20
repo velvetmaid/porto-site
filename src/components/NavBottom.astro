@@ -1,0 +1,72 @@
+<nav class="top-nav mt-5" aria-label="Page navigation">
+  <button id="backBtn" class="bg-purple-100/10 hover:bg-purple-500/10" type="button" aria-label="Previous page" title="Previous page">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="m14 6-6 6 6 6" />
+    </svg>
+  </button>
+  <button id="forwardBtn" class="bg-purple-100/10 hover:bg-purple-500/10" type="button" aria-label="Next page" title="Next page">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="m10 6 6 6-6 6" />
+    </svg>
+  </button>
+</nav>
+
+<style>
+  .top-nav {
+    display: flex;
+    justify-content: center;
+    width: auto;
+    height: 2.5rem;
+    overflow: hidden;
+    border-bottom-left-radius: 0.55rem;
+    gap: 1.2rem;
+  }
+
+  button {
+    display: inline-flex;
+    width: 2.5rem;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: .5rem;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  button:hover,
+  button:focus-visible {
+    background: rgba(76, 29, 149, 0.1);
+    color: #2e1065;
+    outline: none;
+  }
+
+  button:disabled {
+    cursor: default;
+    opacity: 0.3;
+  }
+
+  button:disabled:hover {
+    background: transparent;
+    color: #4c1d95;
+  }
+
+  svg {
+    width: 1.1rem;
+    height: 1.1rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 2;
+  }
+
+  /* @media (max-width: 42rem) {
+    .top-nav {
+      position: relative;
+      top: auto;
+      right: auto;
+      width: fit-content;
+      margin: 0 0 1rem auto;
+    }
+  } */
+</style>
